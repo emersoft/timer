@@ -14,5 +14,5 @@ pause.addEventListener('click', () => {
 });
 
 setInterval(() => {
-  timer.textContent = '' + timerApp.time / 1000;
-}, 1000);
+  timer.textContent = '' + timerApp.time;
+}, 100);

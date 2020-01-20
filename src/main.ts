@@ -2,30 +2,42 @@ export interface TimerConfig {
   time?: number;
 }
 
-interface StartStopTime {
-  startTime: Date;
-  stopTime: Date;
-}
-
 export class Timer {
-  private _time: number;
-  private interval: number;
-  private step: number = 50;
-  constructor({ time = 0 }: TimerConfig) {
-    this._time = time;
+  private _time: number = 0;
+  private startTime: number = null;
+  private stopTime: number = null;
+  private isActive: boolean = false;
+
+  constructor({ time }: TimerConfig) {
+    if (time) {
+      this._time = time * 1000;
+    }
   }
 
   public get time(): number {
-    return this._time;
+    if (this.isActive) {
+      return (this._time + (this.stopTime || new Date().getTime() - this.startTime)) / 1000;
+    }
+    return this._time / 1000;
   }
 
   public play(): void {
-    this.interval = window.setInterval(() => {
-      this._time += this.step;
-    }, this.step);
+    if (!this.isActive) {
+      this.isActive = true;
+      this.stopTime = null;
+      this.startTime = new Date().getTime();
+    }
   }
 
   public pause(): void {
-    window.clearInterval(this.interval);
+    if (this.isActive) {
+      this.isActive = false;
+      this.stopTime = new Date().getTime();
+      this.setTime();
+    }
+  }
+
+  private setTime(): void {
+    this._time = this._time + this.stopTime - this.startTime;
   }
 }

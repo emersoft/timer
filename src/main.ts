@@ -7,18 +7,27 @@ export class Timer {
   private startTime: number = null;
   private stopTime: number = null;
   private isActive: boolean = false;
+  private ONE_SECOND: number = 1000;
 
   constructor({ time }: TimerConfig) {
-    if (time) {
-      this._time = time * 1000;
+    if (Number.isInteger(time) && time > 0) {
+      this._time = time * this.ONE_SECOND;
     }
   }
 
   public get time(): number {
     if (this.isActive) {
-      return (this._time + (this.stopTime || new Date().getTime() - this.startTime)) / 1000;
+      return this.calculateTime() / this.ONE_SECOND;
     }
-    return this._time / 1000;
+    return this._time / this.ONE_SECOND;
+  }
+
+  public get convertToTimeDisplay(): string {
+    const hoursValue = '' + Math.floor(this.time / 3600);
+    let hours = hoursValue.length < 2 ? ('00' + hoursValue).slice(-2) : hoursValue;
+    const minutes = ('00' + Math.floor((this.time % 3600) / 60)).slice(-2);
+    const seconds = ('00' + Math.floor(this.time % 60)).slice(-2);
+    return `${hours}:${minutes}:${seconds}`;
   }
 
   public play(): void {
@@ -33,11 +42,11 @@ export class Timer {
     if (this.isActive) {
       this.isActive = false;
       this.stopTime = new Date().getTime();
-      this.setTime();
+      this._time = this.calculateTime();
     }
   }
 
-  private setTime(): void {
-    this._time = this._time + this.stopTime - this.startTime;
+  private calculateTime(): number {
+    return this._time + (this.stopTime || new Date().getTime()) - this.startTime;
   }
 }

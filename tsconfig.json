@@ -13,7 +13,12 @@
     "preserveConstEnums": true,
     "sourceMap": true,
     "target": "es6",
-    "typeRoots": ["node_modules/@types"]
+    "typeRoots": ["node_modules/@types"],
+    "paths": {
+      "@model/*": ["src/app/model/*"],
+      "@services/*": ["src/app/services/*"],
+      "@core/*": ["src/app/core/*"]
+    }
   },
   "exclude": ["node_modules"]
 }

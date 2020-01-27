@@ -12,7 +12,11 @@ module.exports = {
   },
   resolve: {
     extensions: ['.ts', '.js'],
-    alias: {},
+    alias: {
+      '@core': path.resolve(__dirname, '../src/app/core/'),
+      '@model': path.resolve(__dirname, '../src/app/model/'),
+      '@services': path.resolve(__dirname, '../src/app/services/'),
+    },
   },
   output: {
     filename: '[name].js',

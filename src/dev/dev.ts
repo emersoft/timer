@@ -1,23 +1,19 @@
-import { Timer } from '../main';
+import { initialize } from '../main';
 
 const play: HTMLElement = document.getElementById('play');
 const pause: HTMLElement = document.getElementById('pause');
-const timerSeconds: HTMLElement = document.getElementById('timer-seconds');
-const timerClock: HTMLElement = document.getElementById('timer-clock');
+const chapterIdElem = <HTMLInputElement>document.getElementById('chapterId');
+const typeElem = <HTMLInputElement>document.getElementById('type');
+const userIdElem = <HTMLInputElement>document.getElementById('userId');
 
-const timerApp = new Timer({ time: 0 });
+const timerApp = initialize();
 
 play.addEventListener('click', () => {
-  timerApp.play();
+  timerApp.start();
 });
 pause.addEventListener('click', () => {
-  timerApp.pause();
+  const chapterId = chapterIdElem.value;
+  const type = typeElem.value;
+  const userId = userIdElem.value;
+  timerApp.stop({ chapterId, type, userId });
 });
-
-setInterval(() => {
-  timerSeconds.textContent = '' + timerApp.time;
-}, 100);
-
-setInterval(() => {
-  timerClock.textContent = timerApp.convertToTimeDisplay;
-}, 100);
